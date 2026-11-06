@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rekap Konsumsi Kreatin</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg2:#E1E6EB;--bg:#EDF0F3;--surface:#F8FAFB;--ink:#12202E;--mute:#5B6B7B;--grid:rgba(18,32,46,.07);--line:rgba(18,32,46,.28);--accent:#2347D9;--onacc:#fff;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg2:#070F1B;--bg:#0C1829;--surface:#112038;--ink:#DCE6F2;--mute:#8497AD;--grid:rgba(160,190,230,.08);--line:rgba(180,205,240,.28);--accent:#7B97FF;--onacc:#0C1829;color-scheme:dark}}
+:root[data-theme="dark"]{--bg2:#070F1B;--bg:#0C1829;--surface:#112038;--ink:#DCE6F2;--mute:#8497AD;--grid:rgba(160,190,230,.08);--line:rgba(180,205,240,.28);--accent:#7B97FF;--onacc:#0C1829;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg2);color:var(--ink);font-family:'Bricolage Grotesque',system-ui,sans-serif;min-height:100vh;padding:28px 16px 40px}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.sheet{position:relative;max-width:1040px;margin:0 auto;border:1px solid var(--ink);background-color:var(--bg);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
+.reg{position:absolute;width:17px;height:17px;background:linear-gradient(var(--ink),var(--ink)) center/100% 1px no-repeat,linear-gradient(var(--ink),var(--ink)) center/1px 100% no-repeat}
+.reg.a{top:-9px;left:-9px}.reg.b{top:-9px;right:-9px}.reg.c{bottom:-9px;left:-9px}.reg.d{bottom:-9px;right:-9px}
+.rule{height:1px;background:var(--ink);transform-origin:left;animation:draw 1s cubic-bezier(.7,0,.2,1) both;animation-delay:var(--d,0s)}
+@keyframes draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+header{display:grid;grid-template-columns:1fr auto}
+.ttl{padding:24px 24px 22px}
+.ttl h1{margin:0;font-size:clamp(26px,4.4vw,40px);font-weight:800;letter-spacing:-.03em;line-height:1.05}
+.ttl p{margin:8px 0 0;color:var(--mute);font-size:14px}
+.block{display:grid;grid-template-columns:repeat(4,auto);border-left:1px solid var(--ink)}
+.block div{padding:14px 18px;border-left:1px solid var(--line);display:flex;flex-direction:column;justify-content:flex-end;gap:4px;font-size:13px}
+.block div:first-child{border-left:0}
+.block small{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mute)}
+.theme{background:none;border:0;padding:0;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:underline;text-underline-offset:3px}
+
+.hero{display:grid;grid-template-columns:1.1fr .9fr}
+.total{padding:34px 24px;display:flex;flex-direction:column;justify-content:center;gap:18px}
+.dim{display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--mute)}
+.dim::before,.dim::after{content:"";flex:1;height:11px;border-left:1px solid var(--ink);border-right:1px solid var(--ink);background:linear-gradient(var(--ink),var(--ink)) center/100% 1px no-repeat}
+.big{display:flex;align-items:baseline;gap:12px}
+.big b{font-size:clamp(96px,17vw,180px);font-weight:800;letter-spacing:-.05em;line-height:.85;font-variant-numeric:tabular-nums}
+.big em{font-style:normal;font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--mute)}
+.note{margin:0;font-size:13px;color:var(--mute);max-width:34ch}
+
+.dialwrap{border-left:1px solid var(--ink);display:grid;place-items:center;padding:28px 16px;gap:14px;text-align:center}
+.dial{position:relative;width:min(300px,72vw);aspect-ratio:1;border:0;background:none;padding:0;transition:transform .15s}
+.dial:active{transform:scale(.95)}
+.dial svg{width:100%;height:100%;overflow:visible}
+.dial .out{fill:none;stroke:var(--ink);stroke-width:1;stroke-dasharray:1;stroke-dashoffset:1;animation:ring 1.6s .3s cubic-bezier(.7,0,.2,1) forwards}
+@keyframes ring{to{stroke-dashoffset:0}}
+.dial .spin{transform-origin:120px 120px;animation:spin 70s linear infinite;fill:none;stroke:var(--mute);stroke-width:1;stroke-dasharray:2 6}
+@keyframes spin{to{transform:rotate(360deg)}}
+.dial .cross{stroke:var(--line);stroke-width:1}
+.dial .tk{stroke:var(--line);stroke-width:1.5;transition:stroke .3s,stroke-width .3s}
+.dial .tk.on{stroke:var(--accent);stroke-width:3}
+.dial .core{fill:var(--surface);stroke:var(--ink);stroke-width:1.5;transition:fill .25s}
+.dial:hover .core{fill:var(--accent)}
+.dial .lbl{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;pointer-events:none;transition:color .25s}
+.dial .lbl b{font-size:34px;font-weight:800;letter-spacing:.12em}
+.dial .lbl span{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mute)}
+.dial:hover .lbl,.dial:hover .lbl span{color:var(--onacc)}
+.pulse{position:absolute;inset:18%;border:2px solid var(--accent);border-radius:50%;pointer-events:none;animation:pulse .8s ease-out forwards}
+@keyframes pulse{to{transform:scale(1.6);opacity:0}}
+.hint{margin:0;font-size:12px;color:var(--mute)}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr)}
+.stat{padding:18px 24px;border-left:1px solid var(--line)}
+.stat:first-child{border-left:0}
+.stat small{display:block;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--mute);margin-bottom:6px}
+.stat b{font-size:32px;font-weight:600;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.stat span{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--mute);margin-left:6px}
+
+.sec{padding:20px 24px 8px}
+
+.row{display:grid;grid-template-columns:minmax(150px,210px) 1fr 40px auto;align-items:center;gap:16px;padding:12px 24px;border-top:1px solid var(--line);transition:background .2s}
+.row:hover{background:color-mix(in srgb,var(--accent) 9%,transparent)}
+.row .d{font-family:'IBM Plex Mono',monospace;font-size:14px}
+.row .ln{height:1px;background:var(--ink);position:relative;transform-origin:left}
+.row .ln::after{content:"";position:absolute;right:-3px;top:-3px;width:7px;height:7px;background:var(--accent)}
+.row .n{font-weight:800;font-size:20px;text-align:right;font-variant-numeric:tabular-nums}
+.row.in{animation:slide .55s cubic-bezier(.2,.8,.2,1) both}
+.row.in .ln{animation:draw .8s .15s cubic-bezier(.7,0,.2,1) both}
+@keyframes slide{from{opacity:0;transform:translateX(-14px);background:color-mix(in srgb,var(--accent) 22%,transparent)}}
+.acts{display:flex;gap:6px}
+.sm{background:none;border:1px solid var(--line);padding:4px 10px;font-family:'IBM Plex Mono',monospace;font-size:12px;transition:all .15s}
+.sm:hover{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.sm.del:hover{background:#C0392B;border-color:#C0392B;color:#fff}
+.empty{padding:36px 24px;border-top:1px solid var(--line);color:var(--mute);font-size:14px}
+.empty b{color:var(--ink)}
+
+.foot{display:flex;flex-wrap:wrap;gap:12px;padding:16px 24px;border-top:1px solid var(--ink)}
+.btn{background:var(--ink);color:var(--bg);border:1px solid var(--ink);padding:10px 18px;font-size:14px;font-weight:600;transition:transform .15s,background .2s}
+.btn:hover{background:var(--accent);border-color:var(--accent);color:var(--onacc)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:none;color:var(--ink)}
+.btn.ghost:hover{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.btn.warn{background:#C0392B;border-color:#C0392B;color:#fff}
+
+.modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(7,15,27,.6);padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px));z-index:10}
+.modal.open{display:grid}
+.card{width:100%;max-width:400px;background:var(--surface);border:1px solid var(--ink);animation:pop .3s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.97)}}
+.card h3{margin:0;padding:18px 20px;font-size:18px}
+.card label{display:block;padding:14px 20px 0;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--mute)}
+.card input{display:block;width:100%;margin-top:6px;padding:10px 12px;background:var(--bg);color:var(--ink);border:1px solid var(--ink);border-radius:0;font:15px 'IBM Plex Mono',monospace}
+.card .foot{margin-top:20px;justify-content:flex-end;padding:14px 20px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);opacity:0;background:var(--ink);color:var(--bg);padding:10px 16px;font-family:'IBM Plex Mono',monospace;font-size:13px;transition:all .35s cubic-bezier(.2,.8,.2,1);pointer-events:none;z-index:20}
+.toast.show{transform:translate(-50%,0);opacity:1}
+
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--mute);margin-right:7px}
+.dot.ok{background:#2E9E5B}.dot.busy{background:var(--accent);animation:blink 1s infinite}.dot.err{background:#C0392B}
+@keyframes blink{50%{opacity:.25}}
+.msg{padding:12px 20px 0;font-size:13px;color:var(--mute)}.msg.err{color:#C0392B}
+.help{padding:0 20px;margin:14px 0 0;font-size:12px;line-height:1.55;color:var(--mute)}
+.card{max-height:100%;overflow:auto}.card.wide{max-width:460px}
+.card .two{display:grid;grid-template-columns:1fr 1fr;gap:0 4px}
+.card .two label{padding-right:0}.card .two label:last-child{padding-left:8px}
+@media(max-width:760px){
+ header,.hero{grid-template-columns:1fr}
+ .block{border-left:0;border-top:1px solid var(--ink);grid-template-columns:1fr 1fr}
+ .block div{padding:10px 12px}.block div:nth-child(n+3){border-top:1px solid var(--line)}.block div:nth-child(3){border-left:0}
+ .dialwrap{border-left:0;border-top:1px solid var(--ink)}
+ .stats .stat{padding:14px 12px}.stat b{font-size:24px}.stat span{display:block;margin:2px 0 0}
+ .row{grid-template-columns:1fr 36px auto;padding:12px 16px}.row .ln{display:none}
+ .ttl,.total,.sec,.foot{padding-left:16px;padding-right:16px}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-delay:0s!important;transition-duration:.01s!important}.dial .spin{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="sheet">
+ <span class="reg a"></span><span class="reg b"></span><span class="reg c"></span><span class="reg d"></span>
+
+ <header>
+  <div class="ttl">
+   <h1>Rekap konsumsi kreatin</h1>
+   <p>Satu klik, satu scoop. Semua tercatat rapi di lembar ini.</p>
+  </div>
+  <div class="block">
+   <div><small>proyek</small>Kreatin harian</div>
+   <div><small>tanggal</small><span id="todayLabel"></span></div>
+   <div><small>penyimpanan</small><button class="theme" id="syncBtn" style="text-decoration:none"><span class="dot" id="syncDot"></span><span id="syncTxt">lokal saja</span></button></div>
+   <div><small>tampilan</small><button class="theme" id="theme">ganti tema</button></div>
+  </div>
+ </header>
+ <div class="rule"></div>
+
+ <section class="hero">
+  <div class="total">
+   <div class="dim"><span>total keseluruhan</span></div>
+   <div class="big"><b id="total">0</b><em>scoop</em></div>
+   <p class="note">Jumlah semua scoop dari seluruh hari yang pernah dicatat.</p>
+  </div>
+  <div class="dialwrap">
+   <button class="dial" id="quick" aria-label="Tambah 1 scoop hari ini">
+    <svg viewBox="0 0 240 240" aria-hidden="true">
+     <line class="cross" x1="0" y1="120" x2="240" y2="120"/><line class="cross" x1="120" y1="0" x2="120" y2="240"/>
+     <circle class="out" cx="120" cy="120" r="116" pathLength="1"/>
+     <circle class="spin" cx="120" cy="120" r="108"/>
+     <g id="ticks"></g>
+     <circle class="core" cx="120" cy="120" r="78"/>
+    </svg>
+    <div class="lbl"><b>KLIK</b><span>+1 scoop hari ini</span></div>
+   </button>
+   <p class="hint">Setiap garis biru di cincin menandai satu scoop hari ini.</p>
+  </div>
+ </section>
+ <div class="rule" style="--d:.2s"></div>
+
+ <section class="stats">
+  <div class="stat"><small>hari ini</small><b id="sToday">0</b><span>scoop</span></div>
+  <div class="stat"><small>rata-rata per hari</small><b id="sAvg">0</b><span>scoop</span></div>
+  <div class="stat"><small>hari tercatat</small><b id="sDays">0</b><span>hari</span></div>
+ </section>
+ <div class="rule" style="--d:.3s"></div>
+
+
+ <section>
+  <div class="sec" style="padding-bottom:16px"><div class="dim"><span>histori catatan</span></div></div>
+  <div id="ledger"></div>
+ </section>
+
+ <div class="foot">
+  <button class="btn" id="openManual">Tambah atau ubah manual</button>
+  <button class="btn ghost" id="reset">Hapus semua data</button>
+ </div>
+</div>
+
+<div class="modal" id="modal">
+ <div class="card">
+  <h3 id="mTitle">Tambah atau ubah scoop</h3>
+  <form id="form">
+   <label>tanggal<input type="date" id="fDate" required></label>
+   <label>jumlah scoop (0 untuk menghapus)<input type="number" id="fCount" min="0" max="20" required></label>
+   <div class="foot">
+    <button type="button" class="btn ghost" id="cancel">Batal</button>
+    <button type="submit" class="btn">Simpan</button>
+   </div>
+  </form>
+ </div>
+</div>
+<div class="modal" id="gmodal">
+ <div class="card wide">
+  <h3>Simpan data di GitHub</h3>
+  <form id="gform">
+   <div class="two">
+    <label>username atau organisasi<input id="gOwner" required autocomplete="off" placeholder="budi"></label>
+    <label>nama repo<input id="gRepo" required autocomplete="off" placeholder="kreatin-tracker"></label>
+   </div>
+   <div class="two">
+    <label>branch<input id="gBranch" autocomplete="off" placeholder="main"></label>
+    <label>file data<input id="gPath" autocomplete="off" placeholder="data/kreatin.json"></label>
+   </div>
+   <label>personal access token<input type="password" id="gToken" required autocomplete="off" placeholder="github_pat_..."></label>
+   <p class="help">Buat token di GitHub: Settings, Developer settings, Fine-grained tokens. Pilih hanya repo ini, izin Contents: Read and write. Token disimpan di browser perangkat ini saja dan tidak masuk ke kode. Ulangi sekali di tiap perangkat.</p>
+   <div class="msg" id="gmsg"></div>
+   <div class="foot">
+    <button type="button" class="btn ghost" id="gOff" style="margin-right:auto">Putuskan</button>
+    <button type="button" class="btn ghost" id="gCancel">Batal</button>
+    <button type="submit" class="btn">Simpan dan hubungkan</button>
+   </div>
+  </form>
+ </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const KEY='creatine_tracker_logs_v1',PKEY='ct_pending',CKEY='ct_gh';
+const DAYS=['minggu','senin','selasa','rabu','kamis','jumat','sabtu'];
+const $=id=>document.getElementById(id);
+const p2=n=>String(n).padStart(2,'0');
+const iso=d=>d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate());
+const today=()=>iso(new Date());
+const label=k=>{const d=new Date(k+'T00:00:00');return DAYS[d.getDay()]+', '+p2(d.getDate())+'/'+p2(d.getMonth()+1)+'/'+d.getFullYear()};
+const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}};
+const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+
+let logs=ld(KEY,{}),pending=ld(PKEY,{}),cfg=ld(CKEY,null);
+let changed=null,first=true,resetTimer=null,sha=null,timer=null,busy=false;
+
+/* ---------- GitHub sync ---------- */
+function setStatus(txt,cls){$('syncTxt').textContent=txt;$('syncDot').className='dot '+(cls||'')}
+const enc=o=>btoa(unescape(encodeURIComponent(JSON.stringify(Object.fromEntries(Object.entries(o).sort()),null,1))));
+const dec=s=>JSON.parse(decodeURIComponent(escape(atob(s.replace(/\s/g,'')))));
+const api=()=>'https://api.github.com/repos/'+cfg.owner+'/'+cfg.repo+'/contents/'+cfg.path;
+const hdr=()=>({Authorization:'Bearer '+cfg.token,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'});
+
+async function fetchRemote(){
+  const r=await fetch(api()+'?ref='+encodeURIComponent(cfg.branch)+'&t='+Date.now(),{headers:hdr(),cache:'no-store'});
+  if(r.status===404){sha=null;return {}}
+  if(r.status===401)throw new Error('Token ditolak (401). Periksa token Anda.');
+  if(r.status===403)throw new Error('Akses ditolak (403). Pastikan token punya izin Contents: Read and write.');
+  if(!r.ok)throw new Error('Gagal membaca data ('+r.status+').');
+  const j=await r.json();sha=j.sha;return j.content?dec(j.content):{};
+}
+function applyPending(base){
+  for(const k in pending){if(pending[k]>0)base[k]=pending[k];else delete base[k]}
+  return base;
+}
+function schedule(){if(!cfg)return;clearTimeout(timer);timer=setTimeout(()=>{timer=null;sync()},800)}
+
+async function sync(){
+  if(!cfg||busy)return;
+  busy=true;let failed=false;setStatus('menyinkronkan…','busy');
+  try{
+    for(let t=0;t<3;t++){
+      const remote=applyPending(await fetchRemote());
+      logs=remote;sv(KEY,logs);render();
+      if(!Object.keys(pending).length){setStatus('tersinkron','ok');break}
+      const snap={...pending};
+      const body={message:'Update rekap kreatin',content:enc(remote),branch:cfg.branch};
+      if(sha)body.sha=sha;
+      const r=await fetch(api(),{method:'PUT',headers:hdr(),body:JSON.stringify(body)});
+      if(r.ok){
+        for(const k in snap)if(pending[k]===snap[k])delete pending[k];
+        sv(PKEY,pending);setStatus('tersinkron','ok');break;
+      }
+      if(r.status===409||r.status===422)continue; // data berubah di perangkat lain, ambil ulang
+      throw new Error('Gagal menyimpan ('+r.status+').');
+    }
+  }catch(e){
+    failed=true;setStatus('belum tersinkron','err');
+    if(e instanceof TypeError)toast('Tidak ada koneksi. Data aman di perangkat ini.');else toast(e.message);
+  }
+  busy=false;
+  if(!failed&&Object.keys(pending).length)schedule();
+}
+
+/* ---------- data ---------- */
+function setLog(k,v){
+  if(v>0)logs[k]=v;else delete logs[k];
+  if(cfg){pending[k]=v>0?v:0;sv(PKEY,pending)}
+  sv(KEY,logs);changed=v>0?k:null;render();schedule();
+}
+
+function countTo(el,to){
+  const from=+el.dataset.v||0;el.dataset.v=to;
+  if(from===to||still){el.textContent=to;return}
+  const t0=performance.now();
+  (function f(t){const p=Math.min(1,(t-t0)/700),e=1-Math.pow(1-p,3);el.textContent=Math.round(from+(to-from)*e);if(p<1)requestAnimationFrame(f)})(t0);
+}
+
+const NT=40,tg=$('ticks');
+for(let i=0;i<NT;i++){
+  const a=i/NT*2*Math.PI-Math.PI/2,c=Math.cos(a),s=Math.sin(a);
+  const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+  l.setAttribute('class','tk');
+  l.setAttribute('x1',120+c*88);l.setAttribute('y1',120+s*88);
+  l.setAttribute('x2',120+c*100);l.setAttribute('y2',120+s*100);
+  tg.appendChild(l);
+}
+
+function render(){
+  const keys=Object.keys(logs).sort((a,b)=>b.localeCompare(a));
+  const total=keys.reduce((s,k)=>s+logs[k],0);
+  const max=Math.max(1,...keys.map(k=>logs[k]));
+  const tod=logs[today()]||0;
+
+  countTo($('total'),total);
+  countTo($('sToday'),tod);
+  $('sAvg').textContent=keys.length?(total/keys.length).toFixed(1).replace('.',','):'0';
+  countTo($('sDays'),keys.length);
+
+  const lit=tod===0?0:((tod-1)%NT)+1;
+  [...tg.children].forEach((t,i)=>setTimeout(()=>t.classList.toggle('on',i<lit),still?0:i*12));
+
+  const L=$('ledger');
+  if(!keys.length){
+    L.innerHTML='<div class="empty"><b>Belum ada catatan.</b> Klik tombol bulat di atas untuk mencatat scoop pertama.</div>';
+  }else{
+    L.innerHTML=keys.map((k,i)=>{
+      const anim=(first&&i<12)||k===changed;
+      return '<div class="row'+(anim?' in':'')+'" style="'+(first?'animation-delay:'+(.5+i*.05)+'s':'')+'">'+
+      '<div class="d">'+label(k)+'</div>'+
+      '<div class="ln" style="width:'+Math.max(4,logs[k]/max*100)+'%"></div>'+
+      '<div class="n">'+logs[k]+'</div>'+
+      '<div class="acts"><button class="sm" data-edit="'+k+'">ubah</button><button class="sm del" data-del="'+k+'">hapus</button></div></div>';
+    }).join('');
+  }
+  first=false;changed=null;
+}
+
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2400)}
+
+/* ---------- interaksi ---------- */
+$('quick').addEventListener('click',()=>{
+  const k=today(),n=(logs[k]||0)+1;
+  const p=document.createElement('div');p.className='pulse';$('quick').appendChild(p);setTimeout(()=>p.remove(),850);
+  setLog(k,n);toast('Ditambahkan: '+n+' scoop hari ini');
+});
+
+const modal=$('modal'),gmodal=$('gmodal');
+const openM=(k,v)=>{$('fDate').value=k;$('fCount').value=v;modal.classList.add('open');setTimeout(()=>$('fCount').focus(),50)};
+const closeM=()=>modal.classList.remove('open');
+const closeG=()=>gmodal.classList.remove('open');
+$('openManual').addEventListener('click',()=>openM(today(),1));
+$('cancel').addEventListener('click',closeM);
+modal.addEventListener('click',e=>{if(e.target===modal)closeM()});
+gmodal.addEventListener('click',e=>{if(e.target===gmodal)closeG()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();closeG()}});
+
+$('form').addEventListener('submit',e=>{
+  e.preventDefault();
+  const k=$('fDate').value,v=parseInt($('fCount').value,10);
+  if(!k||isNaN(v))return;
+  setLog(k,Math.max(0,v));closeM();
+  toast(v<=0?'Catatan dihapus':'Tersimpan: '+v+' scoop');
+});
+
+$('ledger').addEventListener('click',e=>{
+  const ed=e.target.closest('[data-edit]'),dl=e.target.closest('[data-del]');
+  if(ed)openM(ed.dataset.edit,logs[ed.dataset.edit]||0);
+  if(dl){setLog(dl.dataset.del,0);toast('Catatan dihapus')}
+});
+
+$('reset').addEventListener('click',function(){
+  if(!Object.keys(logs).length)return;
+  if(!this.classList.contains('warn')){
+    this.classList.add('warn');this.textContent='Yakin? Ketuk sekali lagi';
+    resetTimer=setTimeout(()=>{this.classList.remove('warn');this.textContent='Hapus semua data'},3000);
+    return;
+  }
+  clearTimeout(resetTimer);this.classList.remove('warn');this.textContent='Hapus semua data';
+  Object.keys(logs).forEach(k=>{if(cfg)pending[k]=0;delete logs[k]});
+  sv(PKEY,pending);sv(KEY,logs);render();schedule();toast('Semua data dihapus');
+});
+
+$('theme').addEventListener('click',()=>{
+  const r=document.documentElement;
+  const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+  r.dataset.theme=dark?'light':'dark';
+  try{localStorage.setItem('ct_theme',r.dataset.theme)}catch(e){}
+});
+try{const t=localStorage.getItem('ct_theme');if(t)document.documentElement.dataset.theme=t}catch(e){}
+
+/* ---------- pengaturan GitHub ---------- */
+const gmsg=(t,err)=>{$('gmsg').textContent=t;$('gmsg').className='msg'+(err?' err':'')};
+$('syncBtn').addEventListener('click',()=>{
+  const c=cfg||{};
+  $('gOwner').value=c.owner||'';$('gRepo').value=c.repo||'';$('gBranch').value=c.branch||'main';
+  $('gPath').value=c.path||'data/kreatin.json';$('gToken').value=c.token||'';
+  $('gOff').style.display=cfg?'':'none';gmsg('');gmodal.classList.add('open');
+});
+$('gCancel').addEventListener('click',closeG);
+$('gform').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const old=cfg;
+  cfg={owner:$('gOwner').value.trim(),repo:$('gRepo').value.trim(),branch:$('gBranch').value.trim()||'main',
+       path:$('gPath').value.trim().replace(/^\/+/,'')||'data/kreatin.json',token:$('gToken').value.trim()};
+  gmsg('Menghubungkan…');
+  try{
+    const remote=await fetchRemote();
+    // data lokal yang belum ada di GitHub ikut dikirim
+    for(const k in logs)if(!(k in remote))pending[k]=logs[k];
+    sv(CKEY,cfg);sv(PKEY,pending);closeG();
+    await sync();toast('Terhubung ke GitHub');
+  }catch(err){
+    cfg=old;
+    gmsg(err instanceof TypeError?'Tidak bisa terhubung. Periksa koneksi internet.':err.message,true);
+  }
+});
+$('gOff').addEventListener('click',()=>{
+  cfg=null;pending={};try{localStorage.removeItem(CKEY);localStorage.removeItem(PKEY)}catch(e){}
+  setStatus('lokal saja','');closeG();toast('GitHub diputuskan. Data tetap ada di perangkat ini.');
+});
+
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&cfg&&!timer)sync()});
+addEventListener('online',()=>{if(cfg)sync()});
+
+$('todayLabel').textContent=label(today());
+render();
+if(cfg){setStatus('menyinkronkan…','busy');sync()}else setStatus('lokal saja','');
+</script>
+</body>
+</html>
